@@ -83,7 +83,7 @@ def logic(place,no,turn):
         warn_label = Label(text="The Place is already Filled!")
         warn_label.grid(columnspan=3, row=0)
 def wincheck():
-    global turn
+    global turn,game_running
     if win(checkerboard):
             warn_label = Label(text="********** " + turn + " won" + " **********")
             warn_label.grid(columnspan=3, row=0)
@@ -95,6 +95,7 @@ def wincheck():
             warn_label.grid(columnspan=3, row=0)
             head1_label = Label(text="********** " + "It's a Tie" + " **********")
             head1_label.grid(columnspan=3, row=4)
+            game_running = False
 def button_click(place,no):
     global turn, c0, c1, c2, r3, r1, r2, checkerboard, game_running, count
     if game_running:
