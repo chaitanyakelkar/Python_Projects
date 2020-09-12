@@ -9,12 +9,7 @@ count = 0
 game_running = True
 c0, c1, c2, r3, r1, r2 = 0, 1, 2, 3, 1, 2
 
-checkerboard = {
-    1: " ", 2: " ", 3: " ",
-    4: " ", 5: " ", 6: " ",
-    7: " ", 8: " ", 9: " "
-}
-
+checkerboard = [" " for i in range(10)]
 
 def button_click(place, no):
     global turn, c0, c1, c2, r3, r1, r2, checkerboard, game_running, count
