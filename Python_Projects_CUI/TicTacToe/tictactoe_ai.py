@@ -1,6 +1,8 @@
 import random
 board = [" " for x in range(10)]
+board[0] = None
 def boardreset():
+    global board
     for i in range(len(board)):
         board[i] = " "
 def printboard():
@@ -10,9 +12,19 @@ def printboard():
     print("\t"+"---------")
     print("\t"+board[7],board[8],board[9],sep=" | ")
 def isfull():
-    return board[1:9] != " "
+    if " " in board[1:9]:
+        return False
+    else:
+        return True
 def wins(bo,let):
-    return (bo[1] == bo[2] == bo[3] == let) or (bo[4] == bo[5] == bo[6] == let) or (bo[7] == bo[8] == bo[9] == let) or (bo[1] == bo[5] == bo[9] == let) or (bo[3] == bo[5] == bo[7] == let)
+    return (bo[1] == let and bo[2] == let and bo[3] == let) or \
+            (bo[4] == let and bo[5] == let and bo[6] == let) or \
+            (bo[7] == let and bo[8] == let and bo[9] == let) or \
+            (bo[1] == let and bo[4] == let and bo[7] == let) or \
+            (bo[2] == let and bo[5] == let and bo[8] == let) or \
+            (bo[3] == let and bo[6] == let and bo[9] == let) or \
+            (bo[1] == let and bo[5] == let and bo[9] == let) or \
+            (bo[3] == let and bo[5] == let and bo[7] == let)
 def playermove():
     run = True
     while run:
@@ -27,7 +39,7 @@ def playermove():
                     run = False
                 else:
                     print("the place is already occupied")
-        except:
+        except ValueError:
             print("ENter a number")
 def compmove():
     move = 0
@@ -53,10 +65,11 @@ def compmove():
         return move
     return move
 def game():
+    boardreset()
     print("this is a tic tac toe game yoo will be 'X' and pc will be'O'")
     printboard()
     while True:
-        if not wins(board,"O") or not isfull():
+        if (not wins(board,"O")) or (not isfull()):
             playermove()
         else:
             if wins(board,"O"):
@@ -67,11 +80,15 @@ def game():
                 print("its a tie")
                 boardreset()
                 break
-        if not wins(board,"X") or not isfull():
+        if (not wins(board,"X")) or (not isfull()):
             move = compmove()
-            board[move] = "O"
-            print(f"PC played a move and inserted 'O' at {move}")
-            printboard()
+            if move == 0:
+                print("Its a tie")
+                break
+            else:
+                board[move] = "O"
+                print(f"PC played a move and inserted 'O' at {move}")
+                printboard()
         elif wins(board,"X"):
             print("Congrats you win")
             boardreset()
