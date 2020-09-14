@@ -10,8 +10,15 @@ game_running = True
 c0, c1, c2, r3, r1, r2 = 0, 1, 2, 3, 1, 2
 
 checkerboard = [" " for i in range(10)]
-def win(bo):
-    return (bo[1] == bo[2] == bo[3] != " ") or (bo[4] == bo[5] == bo[6] != " ") or (bo[7] == bo[8] == bo[9] != " ") or (bo[1] == bo[5] == bo[9] != " ") or (bo[3] == bo[5] == bo[7] != " ")
+def win(bo,turn):
+    return (bo[1] == bo[2] and bo[2] == bo[3] and bo[3] == turn) or \
+            (bo[4] == bo[5] and bo[5] == bo[6] and bo[6] == turn) or \
+            (bo[7] == bo[8] and bo[8] == bo[9] and bo[9] == turn) or \
+            (bo[1] == bo[4] and bo[4] == bo[7] and bo[7] == turn) or \
+            (bo[2] == bo[5] and bo[5] == bo[8] and bo[8] == turn) or \
+            (bo[3] == bo[6] and bo[6] == bo[9] and bo[9] == turn) or \
+            (bo[1] == bo[5] and bo[5] == bo[9] and bo[9] == turn) or \
+            (bo[3] == bo[5] and bo[5] == bo[7] and bo[7] == turn)
 
 def compmove():
     place = {1:button_1,2:button_2,3:button_3,4:button_4,5:button_5,6:button_6,7:button_7,8:button_8,9:button_9}
@@ -21,7 +28,7 @@ def compmove():
     for i in ["O","X"]:
         for j in possibilities:
             copyboard[j] = i
-            if win(copyboard):
+            if win(copyboard,i):
                 mov = j
                 return place[mov],mov
             else:
@@ -33,7 +40,7 @@ def compmove():
         if i in possibilities:
             mov  = i
             return place[mov],mov
-    if not win(copyboard):
+    if not win(copyboard,i):
         move = possibilities[random.randrange(0,len(possibilities))]
         return place[mov],mov
     return place[mov],mov
@@ -82,9 +89,9 @@ def logic(place,no,turn):
     else:
         warn_label = Label(text="The Place is already Filled!")
         warn_label.grid(columnspan=3, row=0)
-def wincheck():
-    global turn,game_running
-    if win(checkerboard):
+def wincheck(turn):
+    global game_running
+    if win(checkerboard,turn):
             warn_label = Label(text="********** " + turn + " won" + " **********")
             warn_label.grid(columnspan=3, row=0)
             head1_label = Label(text="********** " + turn + " won" + " **********")
@@ -101,12 +108,12 @@ def button_click(place,no):
     if game_running:
         turn = "X"
         logic(place,no,"X")
-        wincheck()
+        wincheck(turn)
         turn = "O"
         place,no = compmove()[0],compmove()[1]
         if no > 0:
             logic(place,no,"O")
-        wincheck()
+        wincheck(turn)
         
     else:
         warn_label = Label(text="The Game is over!")
